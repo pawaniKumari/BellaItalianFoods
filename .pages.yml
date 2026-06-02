@@ -1,0 +1,24 @@
+# .pages.yml
+media:
+  folder: public/images # Where your product images will be saved
+content:
+  - name: products
+    label: Product Catalog
+    type: collection
+    folder: src/content/products
+    fields:
+      - name: title
+        label: Product Name
+        type: string
+      - name: price
+        label: Price ($)
+        type: number
+      - name: sku
+        label: SKU
+        type: string
+      - name: image
+        label: Product Image
+        type: image
+      - name: body
+        label: Product Description
+        type: rich-text
