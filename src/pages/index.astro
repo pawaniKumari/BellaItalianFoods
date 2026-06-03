@@ -1,11 +1,150 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { products } from '../data/products';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home">
+  
+  <!-- SECTION 1: HERO -->
+  <section id="home" class="max-w-6xl mx-auto px-4 mt-6 mb-12 md:h-[calc(100vh-9rem)] md:min-h-[450px] md:max-h-[600px]">
+    <div class="bg-teal-800 rounded-[3rem] shadow-2xl flex flex-col md:flex-row items-stretch overflow-hidden h-full">
+      
+      <!-- Text Content (Left Side) -->
+      <div class="w-full md:w-1/2 p-8 md:p-10 lg:p-12 flex flex-col items-start justify-center text-left">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-white">
+          Pure Italian Love <br/>
+          <span class="text-[#CADCAE]">for Sri Lankan Babies.</span>
+        </h1>
+        
+        <p class="text-sm md:text-base mb-8 text-gray-200 max-w-md leading-relaxed">
+          Organic, wholesome baby food inspired by the heart of Italy, now available in Sri Lanka. Give your child the perfect healthy start.
+        </p>
+        
+        <a 
+          href="/BellaItalianFoods/shop" 
+          class="bg-[#CADCAE] text-gray-900 px-6 py-3 rounded-md font-bold text-sm tracking-widest uppercase hover:bg-white transition-all shadow-lg inline-block">
+          Shop Products
+        </a>
+      </div>
+      
+      <!-- Image Container (Right Side) -->
+      <div class="w-full md:w-1/2 p-4 md:p-6 md:pl-0 flex">
+        <img 
+          src="/BellaItalianFoods/images/hero-bg.jpg" 
+          alt="Wholesome Italian Baby Food" 
+          class="w-full h-full min-h-[300px] md:min-h-0 object-cover rounded-[2rem] shadow-inner" 
+        />
+      </div>
+      
+    </div>
+  </section>
+
+  <!-- SECTION 2: ABOUT US -->
+  <section id="about" class="bg-red-50 w-full py-20">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        
+        <!-- Image Container -->
+        <div class="w-full h-80 md:h-96 rounded-[3rem] shadow-sm overflow-hidden">
+          <img 
+            src="/BellaItalianFoods/images/about.png" 
+            alt="About Us - img" 
+            class="w-full h-full object-cover" 
+          />
+        </div>
+        
+        <!-- Text Content -->
+        <div>
+          <h2 class="text-4xl font-bold text-secondary mb-6">From Italy to Sri Lanka</h2>
+          <p class="text-gray-600 leading-relaxed mb-6 text-lg">
+            We believe that a baby's first foods should be as vibrant and full of life as they are. Sourced directly from sustainable farms in Italy and brought right here to Sri Lanka, our purees and pastas introduce your baby to real, premium food without any artificial additives.
+          </p>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: TOP FAVORITES -->
+  <!-- FIXED: Removed rounded-[3rem] so the white background flows perfectly flat into the wave. 
+       Increased pb-32 to give cards breathing room before the curve starts. -->
+  <section class="bg-white pt-20 pb-32">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-secondary mb-4">Top Favorites</h2>
+        <p class="text-gray-500">Explore the wholesome baby foods local parents are loving the most this week.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {products.slice(0, 4).map((product) => (
+          <div class="bg-background rounded-3xl p-6 shadow-sm hover:shadow-xl transition-shadow text-center flex flex-col h-full">
+            <div class="h-40 bg-white rounded-2xl mb-6 flex items-center justify-center text-gray-400">
+              [Image]
+            </div>
+            <h3 class="text-xl font-bold text-secondary mb-2">{product.title}</h3>
+            <div class="mt-auto pt-4 flex justify-between items-center">
+              <span class="text-2xl font-bold text-primary">Rs. {product.price.toFixed(2)}</span>
+              <a href={`/products/${product.id}`} class="bg-secondary text-white px-5 py-2 rounded-full hover:bg-opacity-90 font-bold">View</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: BRAND LOGOS -->
+  <!-- FIXED: Increased pt-14 and pb-16 to perfectly balance the header text and logos inside the curves.
+       Added -mb-12 to pull your footer upward and close the white gap completely. -->
+  <section class="relative bg-brands-bg text-gray-800 pt-14 pb-16 -mb-12">
+
+    <!-- MAIN BRAND CONTENT -->
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      
+      <!-- Compact Header -->
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold tracking-tight text-secondary">
+          Brands We Trust
+        </h2>
+      </div>
+
+      <!-- SINGLE ROW GRID -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 items-center justify-center">
+        
+				<div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/mustela.png" alt="Mustela Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+
+        
+        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/crescendo.png" alt="Crescendo Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+        
+       <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/humana.png" alt="Humana Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+				
+        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/hipp.png" alt="HiPP Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+        
+        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/plasmon.png" alt="Plasmon Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+
+				 <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
+          <img src="/BellaItalianFoods/images/brands/melling.png" alt="Mellin Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BOTTOM SVG WAVE DIVIDER -->
+    <div class="absolute top-full left-0 w-full -mt-px overflow-hidden leading-[0] transform rotate-180">
+      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[40px] md:h-[60px]">
+        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#E5EEE4"></path>
+      </svg>
+    </div>
+    
+  </section>
+
 </Layout>

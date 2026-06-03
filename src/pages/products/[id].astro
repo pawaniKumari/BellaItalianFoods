@@ -1,0 +1,86 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { products } from '../../data/products';
+
+// Tell Astro to generate a page for every product in our data file
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+---
+
+<Layout title={`${product.title} - Bell' Bimbo Foods`}>
+	<div class="max-w-6xl mx-auto px-4 py-12">
+		
+		<div class="text-sm text-gray-500 mb-8">
+			<a href="/" class="hover:text-primary">Home</a> > <a href="/shop" class="hover:text-primary">Shop</a> > <span class="text-secondary font-bold">{product.title}</span>
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+			
+			<div class="flex flex-col gap-4">
+				<div class="w-full h-[500px] bg-white rounded-3xl flex items-center justify-center text-gray-400 shadow-sm border border-gray-100">
+					[Main Image High-Res]
+				</div>
+				<div class="grid grid-cols-3 gap-4">
+					<div class="h-32 bg-white rounded-2xl flex items-center justify-center text-gray-400 border border-gray-100 cursor-pointer hover:border-primary"> [Thumb 1] </div>
+					<div class="h-32 bg-white rounded-2xl flex items-center justify-center text-gray-400 border border-gray-100 cursor-pointer hover:border-primary"> [Thumb 2] </div>
+					<div class="h-32 bg-white rounded-2xl flex items-center justify-center text-gray-400 border border-gray-100 cursor-pointer hover:border-primary"> [Thumb 3] </div>
+				</div>
+			</div>
+
+			<div class="flex flex-col">
+				<h1 class="text-4xl font-bold text-secondary mb-2">{product.title}</h1>
+				<p class="text-3xl font-bold text-primary mb-6">${product.price.toFixed(2)}</p>
+				
+				<div class="bg-green-100 text-green-800 text-sm font-bold inline-block px-3 py-1 rounded-full mb-6 w-max">
+					✓ In Stock - Ready to Ship
+				</div>
+
+				<div class="mb-8">
+					<p class="font-bold text-secondary mb-3">Suitable Age:</p>
+					<div class="flex gap-4">
+						<button class="border-2 border-primary text-primary px-6 py-2 rounded-full font-bold bg-white">6+ mo</button>
+						<button class="border-2 border-gray-200 text-gray-400 px-6 py-2 rounded-full font-bold hover:border-gray-300">8+ mo</button>
+						<button class="border-2 border-gray-200 text-gray-400 px-6 py-2 rounded-full font-bold hover:border-gray-300">12+ mo</button>
+					</div>
+				</div>
+
+				<button class="w-full bg-secondary text-white text-xl font-bold py-4 rounded-full mb-8 hover:bg-opacity-90 shadow-lg">
+					Add to Cart
+				</button>
+
+				<div class="border-t border-gray-200 pt-6 space-y-4">
+					
+					<details class="group" open>
+						<summary class="flex justify-between items-center font-bold cursor-pointer list-none text-lg text-secondary">
+							Description & Ingredients
+							<span class="transition group-open:rotate-180">↓</span>
+						</summary>
+						<p class="text-gray-600 mt-4 leading-relaxed">
+							{product.desc} 100% Organic, No added salt or sugar. Naturally gluten-free.
+						</p>
+					</details>
+					
+					<hr class="border-gray-200" />
+					
+					<details class="group">
+						<summary class="flex justify-between items-center font-bold cursor-pointer list-none text-lg text-secondary">
+							Shipping & Delivery
+							<span class="transition group-open:rotate-180">↓</span>
+						</summary>
+						<p class="text-gray-600 mt-4 leading-relaxed">
+							Standard delivery takes 3-4 working days. Express next-day delivery is available at checkout for orders placed before 2 PM.
+						</p>
+					</details>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+</Layout>

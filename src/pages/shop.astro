@@ -1,0 +1,208 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { products } from '../data/products';
+
+// Extract unique categories from your products data
+const categories = ['All', ...new Set(products.map(p => p.category || 'Other'))];
+
+// Define your specific brands
+const brands = ['All', 'Mellin', 'Plasmon', 'Humana', 'Mustela', 'Hipp', 'Crescendo'];
+---
+
+<Layout title="Shop - Baby Bella Italian Foods">
+  <div class="max-w-6xl mx-auto px-4 py-6 md:py-8">
+    
+    <div class="flex flex-col items-center justify-center mb-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-secondary">Browse our Products</h1>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-4">
+      <span class="text-sm font-bold text-gray-400 uppercase tracking-wider mr-2">Category:</span>
+      <div class="flex flex-wrap justify-center gap-2">
+        {categories.map((category, index) => (
+          <button 
+            class={`category-btn px-5 py-1.5 rounded-full font-semibold text-sm transition-all border-2 
+              ${index === 0 ? 'bg-primary text-white border-primary' : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'}`}
+            data-category={category.toLowerCase()}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
+      <label for="brand-filter" class="text-sm font-bold text-gray-400 uppercase tracking-wider mr-2">Brand:</label>
+      <div class="relative">
+        <select 
+          id="brand-filter" 
+          class="appearance-none px-6 py-2 pr-10 rounded-full font-semibold text-sm bg-white text-gray-600 border-2 border-gray-200 hover:border-primary focus:border-primary focus:ring-0 focus:outline-none transition-all cursor-pointer shadow-sm"
+        >
+          {brands.map((brand) => (
+            <option value={brand.toLowerCase()}>{brand}</option>
+          ))}
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" id="product-grid">
+      {products.map((product) => (
+        <div 
+          class="product-card bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary transition-all flex flex-col h-full cursor-pointer"
+          data-category={(product.category || 'other').toLowerCase()}
+          data-brand={(product.brand || 'other').toLowerCase()}
+          onclick={`window.location.href='/products/${product.id}'`}
+        >
+          
+          <div class="h-48 bg-gray-50 rounded-2xl mb-5 flex items-center justify-center overflow-hidden relative">
+             {product.image ? (
+              <img src={product.image} alt={product.title} class="w-full h-full object-cover" />
+            ) : (
+              <span class="text-gray-300 font-bold">[Image]</span>
+            )}
+            {product.discount && (
+              <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">-{product.discount}%</span>
+            )}
+          </div>
+
+          <div class="flex flex-col flex-grow text-left">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{product.category || 'Meal'}</span>
+              <span class="text-xs font-bold text-primary uppercase tracking-wider">{product.brand || ''}</span>
+            </div>
+            <h3 class="text-lg font-bold text-secondary mb-1 leading-tight">{product.title}</h3>
+            <p class="text-gray-500 text-sm mb-4">Age: {product.age}</p>
+            
+            <div class="mt-auto pt-4 flex flex-col items-start border-t border-gray-50">
+              <span class="text-xs text-gray-400">Price</span>
+              <span class="text-xl font-bold text-primary">Rs. {product.price.toFixed(2)}</span>
+            </div>
+          </div>
+          
+        </div>
+      ))}
+    </div>
+
+    <div id="pagination-controls" class="flex justify-center items-center gap-2">
+    </div>
+    
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const brandSelect = document.getElementById('brand-filter'); // Select dropdown
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const paginationContainer = document.getElementById('pagination-controls');
+
+    // State Variables
+    let activeCategory = 'all';
+    let activeBrand = 'all';
+    let currentPage = 1;
+    const itemsPerPage = 8; // Change this number to show more/less items per page
+
+    // Function to visually update active category buttons
+    function updateActiveButtonStyles(buttons, activeValue, dataAttribute) {
+      buttons.forEach(btn => {
+        if (btn.getAttribute(dataAttribute) === activeValue) {
+          btn.classList.add('bg-primary', 'text-white', 'border-primary');
+          btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+        } else {
+          btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+          btn.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
+        }
+      });
+    }
+
+    // Main render function for filtering and pagination
+    function renderProducts() {
+      // 1. Filter the cards based on both category and brand
+      const filteredCards = productCards.filter(card => {
+        const cardCategory = card.getAttribute('data-category');
+        const cardBrand = card.getAttribute('data-brand');
+        
+        const matchesCategory = activeCategory === 'all' || cardCategory === activeCategory;
+        const matchesBrand = activeBrand === 'all' || cardBrand === activeBrand;
+        
+        return matchesCategory && matchesBrand;
+      });
+
+      // 2. Calculate pagination details
+      const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
+      
+      // Prevent currentPage from exceeding total pages after a filter changes
+      if (currentPage > totalPages && totalPages > 0) {
+        currentPage = totalPages;
+      } else if (totalPages === 0) {
+        currentPage = 1;
+      }
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      // 3. Hide all cards first, then selectively show the ones for the current page
+      productCards.forEach(card => card.style.display = 'none');
+      
+      filteredCards.slice(startIndex, endIndex).forEach(card => {
+        card.style.display = 'flex';
+      });
+
+      // 4. Render Pagination Buttons
+      renderPaginationButtons(totalPages);
+    }
+
+    // Function to draw pagination buttons
+    function renderPaginationButtons(totalPages) {
+      if (!paginationContainer) return;
+      paginationContainer.innerHTML = '';
+
+      if (totalPages <= 1) return; // Hide pagination if only 1 page
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.textContent = i.toString();
+        
+        // Base styling for pagination buttons
+        pageBtn.className = `w-10 h-10 rounded-full font-bold text-sm transition-colors flex items-center justify-center border-2
+          ${i === currentPage 
+            ? 'bg-primary text-white border-primary' 
+            : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'}`;
+        
+        pageBtn.addEventListener('click', () => {
+          currentPage = i;
+          renderProducts();
+          // Scroll back up to the top of the grid
+          document.getElementById('product-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        paginationContainer.appendChild(pageBtn);
+      }
+    }
+
+    // Event Listeners for Category Buttons
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        activeCategory = button.getAttribute('data-category');
+        currentPage = 1; // Reset to page 1 when filter changes
+        updateActiveButtonStyles(categoryButtons, activeCategory, 'data-category');
+        renderProducts();
+      });
+    });
+
+    // Event Listener for Brand Dropdown
+    if (brandSelect) {
+      brandSelect.addEventListener('change', (e) => {
+        activeBrand = e.target.value;
+        currentPage = 1; // Reset to page 1 when filter changes
+        renderProducts();
+      });
+    }
+
+    // Initial render on page load
+    renderProducts();
+  });
+</script>
