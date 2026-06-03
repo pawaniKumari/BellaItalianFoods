@@ -1,24 +1,60 @@
 # .pages.yml
 media:
-  folder: public/images # Where your product images will be saved
+  # Where Pages CMS will save uploaded images in your repo
+  input: public/images
+  # The path your Astro components will use to display those images
+  output: /images
+
 content:
   - name: products
-    label: Product Catalog
+    label: Shop Products
     type: collection
-    folder: src/content/products
+    # The folder where your Astro content collections live
+    path: src/content/products
+    # Naming convention for new product files
+    filename: "{slug}.md"
+    # The columns you see when looking at the list of products in Pages CMS
+    view:
+      fields: [title, sku, price, category]
+    
+    # Define the inputs the CMS user will see
     fields:
+      - name: id
+        label: Product ID
+        type: string
+        required: true
       - name: title
         label: Product Name
         type: string
-      - name: price
-        label: Price ($)
-        type: number
-      - name: sku
-        label: SKU
+        required: true
+      - name: slug
+        label: URL Slug (e.g., little-stars-pastina)
         type: string
+        required: true
+      - name: price
+        label: Price
+        type: number
+        required: true
+      - name: sku
+        label: SKU (e.g., BABY-002)
+        type: string
+        required: true
+      - name: age
+        label: Recommended Age (e.g., 8+ Months)
+        type: string
+        required: true
+      - name: category
+        label: Category
+        type: string
+        required: true
+        # Optional: You can change this to type: select and provide an options array if you want a dropdown
+      - name: brand
+        label: Brand
+        type: string
+        required: true
       - name: image
         label: Product Image
         type: image
-      - name: body
+      - name: desc
         label: Product Description
         type: rich-text
