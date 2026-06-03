@@ -4,7 +4,7 @@ const { title } = Astro.props;
 ---
 
 <html lang="en" class="scroll-smooth scroll-pt-28">
-	<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     
@@ -12,24 +12,26 @@ const { title } = Astro.props;
     
     <link rel="icon" type="image/jpeg" href="/BellaItalianFoods/images/logo.jpg" />
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome CDN for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   </head>
   <body class="bg-background text-gray-800 font-cute antialiased min-h-screen flex flex-col">
     
-    <header class="bg-white py-4 shadow-sm sticky top-0 z-50">
+    <header class="bg-white py-4 shadow-sm sticky top-0 z-50 relative">
       <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
         
         <a href="/BellaItalianFoods/" class="flex items-center">
           <img src="/BellaItalianFoods/images/logo.jpg" alt="Baby Bella Italian Foods Logo" class="h-12 w-auto" />        
         </a>
         
-        <nav class="hidden md:flex space-x-8 font-semibold text-secondary">
+        <button id="mobile-menu-btn" class="md:hidden text-2xl focus:outline-none hover:text-primary transition-colors" aria-label="Toggle Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        
+        <nav id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-white shadow-md flex-col items-center space-y-6 py-6 md:static md:flex md:flex-row md:space-y-0 md:space-x-8 md:w-auto md:bg-transparent md:shadow-none md:py-0 font-semibold text-secondary">
           <a href="/BellaItalianFoods/#home" class="hover:text-primary transition-colors">Home</a>
           <a href="/BellaItalianFoods/#about" class="hover:text-primary transition-colors">About</a>
           <a href="/BellaItalianFoods/shop" class="hover:text-primary transition-colors">Shop</a>
@@ -43,40 +45,30 @@ const { title } = Astro.props;
     </main>
 
     <footer class="bg-primary text-white py-16 mt-12 rounded-t-3xl">
-      <!-- Changed to md:grid-cols-4 and increased gap for better breathing room -->
       <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-12 text-center md:text-left">
         
-        <!-- Column 1: Takes up 2 spans (50% of the width) so it doesn't look squished -->
         <div class="md:col-span-2 pr-0 md:pr-12">
           <h3 class="text-2xl font-bold mb-5">Baby Bella Italian Foods</h3>
           <p class="opacity-80 leading-relaxed text-sm md:text-base">Nourishing your little ones with authentic Italian organic ingredients.</p>
         </div>
         
-        <!-- Column 2: Takes up 1 span -->
         <div class="md:col-span-1">
           <h4 class="font-bold mb-5 text-lg">Quick Links</h4>
-          <!-- Increased space-y-2 to space-y-4 so links aren't crowded -->
           <ul class="space-y-4 opacity-80">
             <li><a href="/shop" class="hover:opacity-100 transition-opacity">Shop Collection</a></li>
             <li><a href="/contact" class="hover:opacity-100 transition-opacity">Contact Support</a></li>
           </ul>
         </div>
         
-        <!-- Column 3: Takes up 1 span -->
         <div class="md:col-span-1">
           <h4 class="font-bold mb-5 text-lg">Follow Us</h4>
-          
-          <!-- Removed mt-2 so icons perfectly align horizontally with "Shop Collection" text -->
           <div class="flex justify-center md:justify-start space-x-5">
-            <!-- Facebook -->
             <a href="https://web.facebook.com/people/Baby-Bella-Italian-food/61587348849143/" target="_blank" rel="noopener noreferrer" class="text-3xl opacity-80 hover:opacity-100 hover:text-white transition-all transform hover:scale-110" aria-label="Facebook">
               <i class="fa-brands fa-facebook"></i>
             </a>
-            <!-- TikTok -->
             <a href="#" target="_blank" rel="noopener noreferrer" class="text-3xl opacity-80 hover:opacity-100 hover:text-white transition-all transform hover:scale-110" aria-label="TikTok">
               <i class="fa-brands fa-tiktok"></i>
             </a>
-            <!-- WhatsApp -->
             <a href="#" target="_blank" rel="noopener noreferrer" class="text-3xl opacity-80 hover:opacity-100 hover:text-white transition-all transform hover:scale-110" aria-label="WhatsApp">
               <i class="fa-brands fa-whatsapp"></i>
             </a>
@@ -85,11 +77,19 @@ const { title } = Astro.props;
         
       </div>
       
-      <!-- Added a subtle border-top to beautifully separate the copyright text -->
       <div class="max-w-6xl mx-auto px-6 mt-12 pt-8 border-t border-white/20 text-center opacity-60 text-sm">
         &copy; 2026 Baby Bella Italian Foods. All rights reserved.
       </div>
     </footer>
 
+    <script>
+      const btn = document.getElementById('mobile-menu-btn');
+      const menu = document.getElementById('mobile-menu');
+
+      btn.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+      });
+    </script>
   </body>
 </html>
