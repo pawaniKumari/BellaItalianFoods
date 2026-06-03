@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #BF4646;
+  --color-secondary: #21825C;
+  --color-background: #FFFFFF;
+  --color-brands-bg: #E5EEE4;
+  --font-cute: "Quicksand", sans-serif;
+}

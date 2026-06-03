@@ -8,6 +8,9 @@ export default {
         secondary: "#21825C",
         background: "#F1F9F9",
       },
+      fontFamily: {
+        cute: ['"Quicksand"', "sans-serif"],
+      },
     },
   },
   plugins: [],
