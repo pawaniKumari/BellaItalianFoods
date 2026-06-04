@@ -1,36 +1,51 @@
-# Astro Starter Kit: Basics
+# Bella Italian Foods
 
-```sh
-npm create astro@latest -- --template basics
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+This is the official website for Bella Italian Foods, an online store specializing in authentic Italian food products. This project is built using the [Astro](https://astro.build/) web framework.
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+The project follows a standard Astro project layout:
 
 ```text
 /
 ├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
+│   └── images/
+│       ├── brands/
+│       └── products/
+├── src/
+│   ├── assets/
+│   ├── components/
 │   │   └── Welcome.astro
-│   ├── layouts
+│   ├── content/
+│   │   └── products/
+│   │       ├── mellin/
+│   │       └── plasmon/
+│   ├── layouts/
 │   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+│   └── pages/
+│       ├── index.astro
+│       ├── contact.astro
+│       ├── shop.astro
+│       └── success.astro
+│   └── styles/
+│       └── global.css
+├── astro.config.mjs
+├── tailwind.config.mjs
+├── tsconfig.json
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Key directories:
+
+- `src/pages/`: Contains the pages of the site.
+- `src/components/`: Contains reusable Astro components.
+- `src/layouts/`: Contains layout components for pages.
+- `src/content/`: Contains content collections, like products.
+- `public/`: Contains static assets like images.
 
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project in a terminal:
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
@@ -41,6 +56,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
