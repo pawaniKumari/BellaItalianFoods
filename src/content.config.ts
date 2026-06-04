@@ -11,6 +11,7 @@ const productsCollection = defineCollection({
     age: z.string(),
     category: z.string(),
     brand: z.string(),
+    publish_date: z.date(),
     image: z.string().optional(),
     // Note: If you use the markdown body for the description instead of the 'desc' frontmatter field,
     // you don't necessarily need to define 'desc' here. But if you keep it as frontmatter, use this:

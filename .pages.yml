@@ -38,7 +38,7 @@ content:
       - name: sku
         label: SKU (e.g., BABY-002)
         type: string
-        required: true
+        required: false
       - name: age
         label: Recommended Age (e.g., 8+ Months)
         type: string
@@ -52,9 +52,23 @@ content:
         label: Brand
         type: string
         required: true
+      - name: publish_date
+        label: Publish Date
+        type: date
+        required: true
+        options:
+          dateFormat: "MM-DD-YYYY"
       - name: image
         label: Product Image
         type: image
       - name: desc
         label: Product Description
         type: rich-text
+      - name: body
+        label: Product Details
+        type: rich-text
+    view:
+      fields: [title, sku, price, brand, publish_date]
+
+settings:
+  hide: true
