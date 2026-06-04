@@ -7,5 +7,5 @@ sku: MEL-001
 age: 4+
 category: Pasta
 brand: Mellin
-image: /images/pastina(320g).jpeg
+image: /BellaItalianFoods/images/pastina(320g).jpeg
 ---

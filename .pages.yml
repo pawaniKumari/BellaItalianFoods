@@ -1,9 +1,9 @@
 # .pages.yml
 media:
   # Where Pages CMS will save uploaded images in your repo
-  input: public/images
+  input: public/images/products
   # The path your Astro components will use to display those images
-  output: /images
+  output: /BellaItalianFoods/images
 
 content:
   - name: products
