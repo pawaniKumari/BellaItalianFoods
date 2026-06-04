@@ -1,12 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { products } from '../data/products';
+import { getCollection } from 'astro:content';
 
-// Extract unique categories from your products data
-const categories = ['All', ...new Set(products.map(p => p.category || 'Other'))];
+// 1. Fetch all products from your Pages CMS collection
+const allProducts = await getCollection('products');
 
-// Define your specific brands
-const brands = ['All', 'Mellin', 'Plasmon', 'Humana', 'Mustela', 'Hipp', 'Crescendo'];
+// 2. Sort by publish date (newest first) - optional but recommended
+const sortedProducts = allProducts.sort((a, b) => 
+  b.data.publish_date.valueOf() - a.data.publish_date.valueOf()
+);
+
+// 3. Extract unique categories and brands dynamically from your live data
+const categories = ['All', ...new Set(sortedProducts.map(p => p.data.category || 'Other'))];
+const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other'))];
 ---
 
 <Layout title="Shop - Baby Bella Italian Foods">
@@ -49,36 +55,34 @@ const brands = ['All', 'Mellin', 'Plasmon', 'Humana', 'Mustela', 'Hipp', 'Cresce
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" id="product-grid">
-      {products.map((product) => (
+      {/* 4. Loop through the dynamically fetched products */}
+      {sortedProducts.map((product) => (
         <div 
           class="product-card bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary transition-all flex flex-col h-full cursor-pointer"
-          data-category={(product.category || 'other').toLowerCase()}
-          data-brand={(product.brand || 'other').toLowerCase()}
-          onclick={`window.location.href='/products/${product.id}'`}
+          data-category={(product.data.category || 'other').toLowerCase()}
+          data-brand={(product.data.brand || 'other').toLowerCase()}
+          onclick={`window.location.href='/shop/${product.slug}'`}
         >
           
           <div class="h-48 bg-gray-50 rounded-2xl mb-5 flex items-center justify-center overflow-hidden relative">
-             {product.image ? (
-              <img src={product.image} alt={product.title} class="w-full h-full object-cover" />
+             {product.data.image ? (
+              <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover" />
             ) : (
-              <span class="text-gray-300 font-bold">[Image]</span>
-            )}
-            {product.discount && (
-              <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-lg">-{product.discount}%</span>
+              <span class="text-gray-300 font-bold">[No Image]</span>
             )}
           </div>
 
           <div class="flex flex-col flex-grow text-left">
             <div class="flex justify-between items-center mb-1">
-              <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{product.category || 'Meal'}</span>
-              <span class="text-xs font-bold text-primary uppercase tracking-wider">{product.brand || ''}</span>
+              <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{product.data.category || 'Meal'}</span>
+              <span class="text-xs font-bold text-primary uppercase tracking-wider">{product.data.brand || ''}</span>
             </div>
-            <h3 class="text-lg font-bold text-secondary mb-1 leading-tight">{product.title}</h3>
-            <p class="text-gray-500 text-sm mb-4">Age: {product.age}</p>
+            <h3 class="text-lg font-bold text-secondary mb-1 leading-tight">{product.data.title}</h3>
+            <p class="text-gray-500 text-sm mb-4">Age: {product.data.age}</p>
             
             <div class="mt-auto pt-4 flex flex-col items-start border-t border-gray-50">
               <span class="text-xs text-gray-400">Price</span>
-              <span class="text-xl font-bold text-primary">Rs. {product.price.toFixed(2)}</span>
+              <span class="text-xl font-bold text-primary">Rs. {product.data.price.toFixed(2)}</span>
             </div>
           </div>
           
