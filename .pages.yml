@@ -1,20 +1,21 @@
 # .pages.yml
 media:
-  # Where Pages CMS will save uploaded images in your repo
   input: public/images/products
-  # The path your Astro components will use to display those images
-  output: /BellaItalianFoods/images
+  # Updated to match the input folder exactly
+  output: /BellaItalianFoods/images/products
 
 content:
   - name: products
     label: Shop Products
     type: collection
-    # The folder where your Astro content collections live
     path: src/content/products
-    # Naming convention for new product files
-    filename: "{fields.brand}/{fields.title}.md"
+    # Changed to {slug} to prevent spaces in your file names
+    filename: "{fields.brand}/{slug}.md"
     
-    # Define the inputs the CMS user will see
+    # Moved the view block up here (optional, but cleaner)
+    view:
+      fields: [title, price, brand, publish_date]
+    
     fields:
       - name: id
         label: Product ID
@@ -42,8 +43,24 @@ content:
       - name: category
         label: Category
         type: select
-        options: ["Pastas", "Riso", "Cereal", "Biscuits", "Puree", "Yoghurt", "Fruits", "Meats", "Cheese", "Oil", "Syrup", "Lentils", "Lotion", "Body Wash", "Other"]
         required: false
+        # Changed to a vertical list so Pages CMS can read it properly
+        options: 
+          - Pastas
+          - Riso
+          - Cereal
+          - Biscuits
+          - Puree
+          - Yoghurt
+          - Fruits
+          - Meats
+          - Cheese
+          - Oil
+          - Syrup
+          - Lentils
+          - Lotion
+          - Body Wash
+          - Other
       - name: brand
         label: Brand
         type: string
@@ -62,8 +79,5 @@ content:
       - name: body
         label: Product Details
         type: rich-text
-    view:
-      fields: [title, price, brand, publish_date]
 
-settings:
-  hide: true
+# Notice I completely removed the settings: hide: true block at the bottom!
