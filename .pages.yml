@@ -66,6 +66,14 @@ content:
         label: Brand
         type: string
         required: true
+        options:
+          values:
+            - Mellin
+            - Plasmon
+            - Hipp
+            - Crescendo
+            - Humana
+            - Mustela
       - name: publish_date
         label: Publish Date
         type: date
