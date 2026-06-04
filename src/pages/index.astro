@@ -1,6 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { products } from '../data/products';
+import { getCollection } from 'astro:content';
+
+// 1. Fetch products from the CMS collection
+const allProducts = await getCollection('products');
+
+// 2. Sort by newest and grab the top 4 to display as favorites
+const topFavorites = allProducts
+  .sort((a, b) => b.data.publish_date.valueOf() - a.data.publish_date.valueOf())
+  .slice(0, 4);
 ---
 
 <Layout title="Home">
@@ -47,7 +55,7 @@ import { products } from '../data/products';
         <!-- Image Container -->
         <div class="w-full h-80 md:h-96 rounded-[3rem] shadow-sm overflow-hidden">
           <img 
-            src="/BellaItalianFoods/images/about.png" 
+            src="/BellaItalianFoods/images/about.jpg" 
             alt="About Us - img" 
             class="w-full h-full object-cover" 
           />
@@ -66,8 +74,6 @@ import { products } from '../data/products';
   </section>
 
   <!-- SECTION 3: TOP FAVORITES -->
-  <!-- FIXED: Removed rounded-[3rem] so the white background flows perfectly flat into the wave. 
-       Increased pb-32 to give cards breathing room before the curve starts. -->
   <section class="bg-white pt-20 pb-32">
     <div class="max-w-6xl mx-auto px-4">
       <div class="text-center mb-12">
@@ -76,75 +82,33 @@ import { products } from '../data/products';
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {products.slice(0, 4).map((product) => (
+        <!-- 3. Loop through the fetched topFavorites -->
+        {topFavorites.map((product) => (
           <div class="bg-background rounded-3xl p-6 shadow-sm hover:shadow-xl transition-shadow text-center flex flex-col h-full">
-            <div class="h-40 bg-white rounded-2xl mb-6 flex items-center justify-center text-gray-400">
-              [Image]
+            
+            <!-- Updated Image container -->
+            <div class="h-40 bg-gray-50 rounded-2xl mb-6 flex items-center justify-center overflow-hidden relative text-gray-400">
+              {product.data.image ? (
+                <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+              ) : (
+                <span class="text-gray-300 font-bold">[No Image]</span>
+              )}
             </div>
-            <h3 class="text-xl font-bold text-secondary mb-2">{product.title}</h3>
+            
+            <!-- Updated Title -->
+            <h3 class="text-xl font-bold text-secondary mb-2 leading-tight">{product.data.title}</h3>
+            
+            <!-- Updated Price and Button -->
             <div class="mt-auto pt-4 flex justify-between items-center">
-              <span class="text-2xl font-bold text-primary">Rs. {product.price.toFixed(2)}</span>
-              <a href={`/products/${product.id}`} class="bg-secondary text-white px-5 py-2 rounded-full hover:bg-opacity-90 font-bold">View</a>
+              <span class="text-2xl font-bold text-primary">Rs. {product.data.price.toFixed(2)}</span>
+              <a href="/BellaItalianFoods/shop" class="bg-secondary text-white px-5 py-2 rounded-full hover:bg-opacity-90 font-bold text-sm tracking-wide">Shop Now</a>
             </div>
+            
           </div>
         ))}
       </div>
     </div>
   </section>
-
-  <!-- SECTION 4: BRAND LOGOS -->
-  <!-- FIXED: Increased pt-14 and pb-16 to perfectly balance the header text and logos inside the curves.
-       Added -mb-12 to pull your footer upward and close the white gap completely. -->
-  <section class="relative bg-brands-bg text-gray-800 pt-14 pb-16 -mb-12">
-
-    <!-- MAIN BRAND CONTENT -->
-    <div class="max-w-6xl mx-auto px-6 relative z-10">
-      
-      <!-- Compact Header -->
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold tracking-tight text-secondary">
-          Brands We Trust
-        </h2>
-      </div>
-
-      <!-- SINGLE ROW GRID -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 items-center justify-center">
-        
-				<div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/mustela.png" alt="Mustela Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-
-        
-        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/crescendo.png" alt="Crescendo Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-        
-       <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/humana.png" alt="Humana Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-				
-        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/hipp.png" alt="HiPP Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-        
-        <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/plasmon.png" alt="Plasmon Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-
-				 <div class="flex items-center justify-center h-16 md:h-20 transition-all duration-300 hover:scale-110 cursor-pointer group">
-          <img src="/BellaItalianFoods/images/brands/melling.png" alt="Mellin Logo" class="h-full w-auto object-contain opacity-90 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
-        </div>
-
-      </div>
-    </div>
-
-    <!-- BOTTOM SVG WAVE DIVIDER -->
-    <div class="absolute top-full left-0 w-full -mt-px overflow-hidden leading-[0] transform rotate-180">
-      <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" class="relative block w-full h-[40px] md:h-[60px]">
-        <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#E5EEE4"></path>
-      </svg>
-    </div>
-    
-  </section>
+  
 
 </Layout>
