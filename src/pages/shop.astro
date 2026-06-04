@@ -58,10 +58,10 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
       {/* 4. Loop through the dynamically fetched products */}
       {sortedProducts.map((product) => (
         <div 
-          class="product-card bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary transition-all flex flex-col h-full cursor-pointer"
+          class="product-card bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary transition-all flex flex-col h-full"
           data-category={(product.data.category || 'other').toLowerCase()}
           data-brand={(product.data.brand || 'other').toLowerCase()}
-onclick={`window.location.href='/shop/${product.id}'`}        >
+        >
           
           <div class="h-48 bg-gray-50 rounded-2xl mb-5 flex items-center justify-center overflow-hidden relative">
              {product.data.image ? (
