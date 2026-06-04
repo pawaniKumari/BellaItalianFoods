@@ -46,21 +46,22 @@ content:
         required: false
         # Changed to a vertical list so Pages CMS can read it properly
         options: 
-          - Pastas
-          - Riso
-          - Cereal
-          - Biscuits
-          - Puree
-          - Yoghurt
-          - Fruits
-          - Meats
-          - Cheese
-          - Oil
-          - Syrup
-          - Lentils
-          - Lotion
-          - Body Wash
-          - Other
+          values:
+            - Pastas
+            - Riso
+            - Cereal
+            - Biscuits
+            - Puree
+            - Yoghurt
+            - Fruits
+            - Meats
+            - Cheese
+            - Oil
+            - Syrup
+            - Lentils
+            - Lotion
+            - Body Wash
+            - Other
       - name: brand
         label: Brand
         type: string
