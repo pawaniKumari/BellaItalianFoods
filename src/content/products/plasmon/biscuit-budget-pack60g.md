@@ -2,7 +2,7 @@
 id: "002"
 title: Biscuit Budget Pack(60g)
 slug: plasmon-biscuit-budget
-price: 598
+price: 600
 category: Biscuits
 brand: Plasmon
 publish_date: 2026-06-04
