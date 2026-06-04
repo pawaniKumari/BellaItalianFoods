@@ -12,10 +12,7 @@ content:
     # The folder where your Astro content collections live
     path: src/content/products
     # Naming convention for new product files
-    filename: "{slug}.md"
-    # The columns you see when looking at the list of products in Pages CMS
-    view:
-      fields: [title, sku, price, category]
+    filename: "{fields.brand}/{fields.title}.md"
     
     # Define the inputs the CMS user will see
     fields:
