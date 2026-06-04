@@ -30,7 +30,7 @@ content:
       - name: slug
         label: URL Slug (e.g., little-stars-pastina)
         type: string
-        required: true
+        required: false
       - name: price
         label: Price
         type: number
@@ -42,12 +42,26 @@ content:
       - name: age
         label: Recommended Age (e.g., 8+ Months)
         type: string
-        required: true
       - name: category
         label: Category
-        type: string
-        required: true
-        # Optional: You can change this to type: select and provide an options array if you want a dropdown
+        type: select
+        options: 
+          - Pastas
+          - Riso
+          - Cereal
+          - Biscuits
+          - Puree
+          - Yoghurt
+          - Fruits
+          - Meats
+          - Cheese
+          - Oil
+          - Syrup
+          - Lentils
+          - Lotion
+          - Body Wash
+          - Other
+        required: false
       - name: brand
         label: Brand
         type: string
@@ -55,7 +69,6 @@ content:
       - name: publish_date
         label: Publish Date
         type: date
-        required: true
         options:
           dateFormat: "MM-DD-YYYY"
       - name: image
@@ -68,7 +81,7 @@ content:
         label: Product Details
         type: rich-text
     view:
-      fields: [title, sku, price, brand, publish_date]
+      fields: [title, price, brand, publish_date]
 
 settings:
   hide: true

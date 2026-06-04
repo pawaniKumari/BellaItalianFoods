@@ -1,21 +1,24 @@
 import { z, defineCollection } from "astro:content";
 
+import { glob } from "astro/loaders";
+
 const productsCollection = defineCollection({
-  type: "content",
+  // 2. Use the loader to point to your products folder
+  loader: glob({ pattern: "**/*.md", base: "./src/content/products" }),
+
   schema: z.object({
     id: z.string(),
     title: z.string(),
-    slug: z.string(),
+    slug: z.string().optional(),
     price: z.number(),
-    sku: z.string(),
-    age: z.string(),
-    category: z.string(),
+    sku: z.string().optional(),
+    age: z.string().optional(),
+    category: z.string().optional(),
     brand: z.string(),
-    publish_date: z.date(),
+    // z.coerce.date() safely converts strings into Date objects
+    publish_date: z.coerce.date().default(() => new Date()),
     image: z.string().optional(),
-    // Note: If you use the markdown body for the description instead of the 'desc' frontmatter field,
-    // you don't necessarily need to define 'desc' here. But if you keep it as frontmatter, use this:
-    desc: z.string(),
+    desc: z.string().optional(),
   }),
 });
 
