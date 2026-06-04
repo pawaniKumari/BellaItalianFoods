@@ -64,7 +64,7 @@ content:
             - Other
       - name: brand
         label: Brand
-        type: string
+        type: select
         required: true
         options:
           values:
