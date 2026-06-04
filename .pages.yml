@@ -42,22 +42,7 @@ content:
       - name: category
         label: Category
         type: select
-        options: 
-          - Pastas
-          - Riso
-          - Cereal
-          - Biscuits
-          - Puree
-          - Yoghurt
-          - Fruits
-          - Meats
-          - Cheese
-          - Oil
-          - Syrup
-          - Lentils
-          - Lotion
-          - Body Wash
-          - Other
+        options: ["Pastas", "Riso", "Cereal", "Biscuits", "Puree", "Yoghurt", "Fruits", "Meats", "Cheese", "Oil", "Syrup", "Lentils", "Lotion", "Body Wash", "Other"]
         required: false
       - name: brand
         label: Brand
