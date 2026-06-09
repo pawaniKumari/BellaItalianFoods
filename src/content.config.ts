@@ -17,7 +17,7 @@ const productsCollection = defineCollection({
     brand: z.string(),
     // z.coerce.date() safely converts strings into Date objects
     publish_date: z.coerce.date().default(() => new Date()),
-    image: z.string().optional(),
+    image: z.array(image()),
     desc: z.string().optional(),
   }),
 });
