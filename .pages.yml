@@ -82,6 +82,7 @@ content:
       - name: image
         label: Product Image
         type: image
+        list: true
       - name: desc
         label: Product Description
         type: rich-text
