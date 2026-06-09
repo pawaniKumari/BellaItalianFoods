@@ -98,8 +98,8 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
             <h3 class="text-lg font-bold text-secondary mb-1 leading-tight">{product.data.title}</h3>
             
             {/* 🌟 ADDED DESCRIPTION 🌟 */}
-            {product.data.desc && (
-              <p class="text-gray-500 text-xs mb-2 line-clamp-2">{product.data.desc}</p>
+            {product.body && (
+              <p class="text-gray-500 text-xs mb-2 line-clamp-2">{product.body}</p>
             )}
 
             <p class="text-gray-500 text-sm mb-4">Age: {product.data.age}</p>
