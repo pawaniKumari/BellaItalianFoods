@@ -5,12 +5,12 @@ import { getCollection } from 'astro:content';
 // 1. Fetch all products from your Pages CMS collection
 const allProducts = await getCollection('products');
 
-// 2. Sort by publish date (newest first) - optional but recommended
+// 2. Sort by publish date (newest first)
 const sortedProducts = allProducts.sort((a, b) => 
   b.data.publish_date.valueOf() - a.data.publish_date.valueOf()
 );
 
-// 3. Extract unique categories and brands dynamically from your live data
+// 3. Extract unique categories and brands dynamically
 const categories = ['All', ...new Set(sortedProducts.map(p => p.data.category || 'Other'))];
 const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other'))];
 ---
@@ -55,7 +55,6 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" id="product-grid">
-      {/* 4. Loop through the dynamically fetched products */}
       {sortedProducts.map((product) => (
         <div 
           class="product-card bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary transition-all flex flex-col h-full"
@@ -63,11 +62,30 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
           data-brand={(product.data.brand || 'other').toLowerCase()}
         >
           
-          <div class="h-48 bg-gray-50 rounded-2xl mb-5 flex items-center justify-center overflow-hidden relative">
-             {product.data.image ? (
-              <img src={product.data.image} alt={product.data.title} class="w-full h-full object-cover" />
+          {/* 🌟 IMAGE CAROUSEL CONTAINER 🌟 */}
+          <div class="h-48 bg-gray-50 rounded-2xl mb-5 relative group overflow-hidden">
+             {product.data.image && product.data.image.length > 0 ? (
+              <>
+                <div class="flex w-full h-full overflow-x-auto snap-x snap-mandatory scrollbar-hide carousel-container" style="scrollbar-width: none; -ms-overflow-style: none;">
+                  {product.data.image.map((img) => (
+                    <img src={img} alt={product.data.title} class="w-full h-full object-cover flex-none snap-center" />
+                  ))}
+                </div>
+                
+                {/* 🌟 ONLY SHOW ARROWS IF THERE IS MORE THAN 1 IMAGE 🌟 */}
+                {product.data.image.length > 1 && (
+                  <>
+                    <button class="carousel-prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button class="carousel-next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                  </>
+                )}
+              </>
             ) : (
-              <span class="text-gray-300 font-bold">[No Image]</span>
+              <span class="text-gray-300 font-bold flex h-full items-center justify-center">[No Image]</span>
             )}
           </div>
 
@@ -76,7 +94,14 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
               <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">{product.data.category || 'Meal'}</span>
               <span class="text-xs font-bold text-primary uppercase tracking-wider">{product.data.brand || ''}</span>
             </div>
+            
             <h3 class="text-lg font-bold text-secondary mb-1 leading-tight">{product.data.title}</h3>
+            
+            {/* 🌟 ADDED DESCRIPTION 🌟 */}
+            {product.data.desc && (
+              <p class="text-gray-500 text-xs mb-2 line-clamp-2">{product.data.desc}</p>
+            )}
+
             <p class="text-gray-500 text-sm mb-4">Age: {product.data.age}</p>
             
             <div class="mt-auto pt-4 flex flex-col items-start border-t border-gray-50">
@@ -95,20 +120,46 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
   </div>
 </Layout>
 
+<style>
+  /* Hides the scrollbar for webkit browsers (Chrome, Safari) */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const categoryButtons = document.querySelectorAll('.category-btn');
-    const brandSelect = document.getElementById('brand-filter'); // Select dropdown
+    const brandSelect = document.getElementById('brand-filter');
     const productCards = Array.from(document.querySelectorAll('.product-card'));
     const paginationContainer = document.getElementById('pagination-controls');
 
-    // State Variables
+    // 🌟 CAROUSEL LOGIC 🌟
+    const prevButtons = document.querySelectorAll('.carousel-prev');
+    const nextButtons = document.querySelectorAll('.carousel-next');
+
+    prevButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault(); 
+        const container = btn.parentElement.querySelector('.carousel-container');
+        container.scrollBy({ left: -container.offsetWidth, behavior: 'smooth' });
+      });
+    });
+
+    nextButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const container = btn.parentElement.querySelector('.carousel-container');
+        container.scrollBy({ left: container.offsetWidth, behavior: 'smooth' });
+      });
+    });
+
+    // 🌟 FILTER & PAGINATION LOGIC 🌟
     let activeCategory = 'all';
     let activeBrand = 'all';
     let currentPage = 1;
-    const itemsPerPage = 8; // Change this number to show more/less items per page
+    const itemsPerPage = 8;
 
-    // Function to visually update active category buttons
     function updateActiveButtonStyles(buttons, activeValue, dataAttribute) {
       buttons.forEach(btn => {
         if (btn.getAttribute(dataAttribute) === activeValue) {
@@ -121,9 +172,7 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
       });
     }
 
-    // Main render function for filtering and pagination
     function renderProducts() {
-      // 1. Filter the cards based on both category and brand
       const filteredCards = productCards.filter(card => {
         const cardCategory = card.getAttribute('data-category');
         const cardBrand = card.getAttribute('data-brand');
@@ -134,10 +183,8 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
         return matchesCategory && matchesBrand;
       });
 
-      // 2. Calculate pagination details
       const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
       
-      // Prevent currentPage from exceeding total pages after a filter changes
       if (currentPage > totalPages && totalPages > 0) {
         currentPage = totalPages;
       } else if (totalPages === 0) {
@@ -147,29 +194,25 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
 
-      // 3. Hide all cards first, then selectively show the ones for the current page
       productCards.forEach(card => card.style.display = 'none');
       
       filteredCards.slice(startIndex, endIndex).forEach(card => {
         card.style.display = 'flex';
       });
 
-      // 4. Render Pagination Buttons
       renderPaginationButtons(totalPages);
     }
 
-    // Function to draw pagination buttons
     function renderPaginationButtons(totalPages) {
       if (!paginationContainer) return;
       paginationContainer.innerHTML = '';
 
-      if (totalPages <= 1) return; // Hide pagination if only 1 page
+      if (totalPages <= 1) return;
 
       for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.textContent = i.toString();
         
-        // Base styling for pagination buttons
         pageBtn.className = `w-10 h-10 rounded-full font-bold text-sm transition-colors flex items-center justify-center border-2
           ${i === currentPage 
             ? 'bg-primary text-white border-primary' 
@@ -178,7 +221,6 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
         pageBtn.addEventListener('click', () => {
           currentPage = i;
           renderProducts();
-          // Scroll back up to the top of the grid
           document.getElementById('product-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
@@ -186,26 +228,23 @@ const brands = ['All', ...new Set(sortedProducts.map(p => p.data.brand || 'Other
       }
     }
 
-    // Event Listeners for Category Buttons
     categoryButtons.forEach(button => {
       button.addEventListener('click', () => {
         activeCategory = button.getAttribute('data-category');
-        currentPage = 1; // Reset to page 1 when filter changes
+        currentPage = 1; 
         updateActiveButtonStyles(categoryButtons, activeCategory, 'data-category');
         renderProducts();
       });
     });
 
-    // Event Listener for Brand Dropdown
     if (brandSelect) {
       brandSelect.addEventListener('change', (e) => {
         activeBrand = e.target.value;
-        currentPage = 1; // Reset to page 1 when filter changes
+        currentPage = 1; 
         renderProducts();
       });
     }
 
-    // Initial render on page load
     renderProducts();
   });
 </script>
