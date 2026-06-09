@@ -1,12 +1,12 @@
 import { z, defineCollection } from "astro:content";
-
 import { glob } from "astro/loaders";
 
 const productsCollection = defineCollection({
   // 2. Use the loader to point to your products folder
   loader: glob({ pattern: "**/*.md", base: "./src/content/products" }),
 
-  schema: z.object({
+  // CHANGE IS HERE: Wrap z.object with ({ image }) =>
+  schema: ({ image }) => z.object({
     id: z.string(),
     title: z.string(),
     slug: z.string().optional(),
@@ -17,7 +17,10 @@ const productsCollection = defineCollection({
     brand: z.string(),
     // z.coerce.date() safely converts strings into Date objects
     publish_date: z.coerce.date().default(() => new Date()),
-    image: z.string().optional(),
+    
+    // Now this will work perfectly!
+    image: z.array(image()), 
+    
     desc: z.string().optional(),
   }),
 });
