@@ -8,6 +8,6 @@ category: Biscuits
 brand: Mellin
 publish_date: 2026-06-04
 image:
-  - /BellaItalianFoods/images/products/mellinbiscuits(360g)-2.jpeg
+  - /BellaItalianFoods/images/products/mellinbiscuits(360g)-1.jpeg
 ---
 8 packets having total biscuits=64
